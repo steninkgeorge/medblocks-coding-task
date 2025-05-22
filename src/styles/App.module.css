@@ -1,0 +1,168 @@
+/* Layout Styles */
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  height: 60px;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navLeft {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #3a7bd5;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.connected {
+  background-color: #4caf50;
+}
+
+.disconnected {
+  background-color: #f44336;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 80px; /* Same as navbar height */
+  left: 0;
+  width: 240px;
+  height: calc(100vh - 60px);
+  background-color: #f8f9fa;
+  border-right: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  overflow-y: auto;
+}
+
+.sidebarHeader {
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0 1.5rem 1rem;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 1rem;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 1rem;
+}
+
+.navItem {
+  color: #555;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.navItem:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.active {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+/* Main Content Styles */
+.mainContent {
+  margin-left: 240px;
+  margin-top: 60px;
+  padding: 2rem;
+  flex: 1;
+}
+
+/* Dashboard Styles */
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.patientCount {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.countNumber {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3a7bd5;
+  margin: 0.5rem 0;
+}
+
+.actionCards {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  border: 1px solid #eee;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #3a7bd5;
+}
+
+.card h3 {
+  color: #3a7bd5;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.card p {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+}

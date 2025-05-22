@@ -1,0 +1,110 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.querySection {
+  margin-bottom: 20px;
+}
+
+.queryInput {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 14px;
+  margin-bottom: 10px;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.runButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.runButton:hover {
+  background-color: #45a049;
+}
+
+.runButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.resultsSection {
+  margin-top: 30px;
+}
+
+.resultsTableContainer {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resultsTable th,
+.resultsTable td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.resultsTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.resultsTable tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.resultsTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+.errorContainer {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.errorText {
+  color: #f44336;
+  margin: 0;
+}
+
+.title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.description {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.emptyResults,
+.initialState {
+  text-align: center;
+  padding: 2rem;
+  color: #95a5a6;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px dashed #ecf0f1;
+}
