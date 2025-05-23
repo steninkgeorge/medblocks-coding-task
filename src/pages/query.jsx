@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
-import styles from '../styles/Query.module.css'
-import { executeQuery } from '../db/fetchPatientData';
-import { Button } from 'antd';
+import React, { useEffect, useState } from "react";
+import styles from "../styles/Query.module.css";
+import { executeQuery } from "../db/fetchPatientData";
+import { Button } from "antd";
+import toast from "react-hot-toast";
 const Query = () => {
   const [query, setQuery] = useState("SELECT * FROM patients ");
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [queryMessage, setQueryMessage] = useState(null);
+
+  useEffect(() => {
+    const storedResult = sessionStorage.getItem("lastQueryResult");
+    if (storedResult) {
+      const res = JSON.parse(storedResult);
+      setResults(res);
+    }
+  }, []);
+
 
   const handleRunQuery = async () => {
     if (!query.trim()) {
-      setError('Please enter a query');
+      setError("Please enter a query");
       return;
     }
 
@@ -19,11 +30,27 @@ const Query = () => {
     setResults(null);
 
     try {
-      const res = await executeQuery(query)
-      
+      const res = await executeQuery(query);
+
+      if (res.success) {
+        setQueryMessage(
+          `updated rows: ${res.data.length},  affected rows : ${res.affectedRows}`
+        );
+      } else {
+        setQueryMessage(null);
+      }
       setResults(res.data);
+      sessionStorage.setItem("lastQueryResult", JSON.stringify(res.data));
+
+      if (!res.success) {
+        toast.error(res.error, { position: "top-right" });
+        setQueryMessage(res.error);
+      }
     } catch (err) {
-      setError('Failed to execute query: ' + (err instanceof Error ? err.message : String(err)));
+      setError(
+        "Failed to execute query: " +
+          (err instanceof Error ? err.message : String(err))
+      );
     } finally {
       setIsLoading(false);
     }
@@ -46,12 +73,7 @@ const Query = () => {
           rows={8}
         />
 
-       
-        <Button
-          type="primary"
-          disabled={isLoading}
-          onClick={handleRunQuery}
-        >
+        <Button type="primary" disabled={isLoading} onClick={handleRunQuery}>
           Run Query
         </Button>
       </div>
@@ -87,7 +109,11 @@ const Query = () => {
             </div>
           ) : (
             <div className={styles.emptyResults}>
-              <p>No records found matching your query</p>
+              <p>
+                {queryMessage
+                  ? queryMessage
+                  : "No records found matching your query"}
+              </p>
             </div>
           )
         ) : (

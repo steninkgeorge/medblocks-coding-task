@@ -11,7 +11,7 @@ export const Sidebar = () => {
         <Link
           to="/"
           className={`${styles.navItem} ${
-            location.pathname === '/' ? styles.active : ""
+            location.pathname === "/" ? styles.active : ""
           }`}
         >
           Dashboard
@@ -19,7 +19,7 @@ export const Sidebar = () => {
         <Link
           to="/register"
           className={`${styles.navItem} ${
-            location.pathname.includes('register') ? styles.active : ""
+            location.pathname.includes("register") ? styles.active : ""
           }`}
         >
           Register
@@ -31,6 +31,14 @@ export const Sidebar = () => {
           }`}
         >
           Query
+        </Link>
+        <Link
+          to="/archive"
+          className={`${styles.navItem} ${
+            location.pathname.includes("archive") ? styles.active : ""
+          }`}
+        >
+          Archive
         </Link>
       </nav>
     </div>

@@ -100,7 +100,7 @@
 
 .emptyResults,
 .initialState {
-  text-align: center;
+  text-align:start;
   padding: 2rem;
   color: #95a5a6;
   background-color: #f9f9f9;

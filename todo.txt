@@ -1,0 +1,31 @@
+TODO:
+
+high prioriy
+
+-app.jsx
+    * build dashboard with cards to navigate to query, patient list and registration pages. 
+
+medium priority 
+
+- query.jsx
+    * add small component that can show template queries 
+    * add a button to save query for later and show all saved queries in dashboard , it shouldnt include the predefined ones.
+
+- Z
+    * add a new item in sidebar named 'records'
+        * it should show all the patient data and should be searchable. 
+
+low priority 
+
+
+- form.jsx
+    * make proper validation for data
+    * make form component pretty 
+
+- navbar.jsx
+    * show connection status in navbard. 
+
+- query.jsx
+    * download the queried data as json or csv.    
+    * bottom should show the number of results
+    * cache the result

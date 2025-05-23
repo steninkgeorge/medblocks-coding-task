@@ -20,6 +20,14 @@ const dbSchemaInit = async (db) => {
     );
   `);
 
+  await db.query(`CREATE TABLE IF NOT EXISTS query_logs (
+  id SERIAL PRIMARY KEY ,
+  query TEXT NOT NULL,
+  status TEXT NOT NULL,
+  result_message TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);`);
+
   await db.query(`
     CREATE INDEX IF NOT EXISTS idx_patient_name ON patients (last_name, first_name);
   `);

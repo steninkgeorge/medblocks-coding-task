@@ -53,13 +53,12 @@
 /* Sidebar Styles */
 .sidebar {
   position: fixed;
-  top: 80px; /* Same as navbar height */
   left: 0;
   width: 240px;
   height: calc(100vh - 60px);
   background-color: #f8f9fa;
   border-right: 1px solid #e0e0e0;
-  padding: 1.5rem 0;
+  padding: 2.5rem 0;
   overflow-y: auto;
 }
 
@@ -102,7 +101,6 @@
 /* Main Content Styles */
 .mainContent {
   margin-left: 240px;
-  margin-top: 60px;
   padding: 2rem;
   flex: 1;
 }
@@ -165,4 +163,8 @@
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.5;
+}
+
+.pageContent{
+  margin-top: 2rem;
 }
