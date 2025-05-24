@@ -45,11 +45,19 @@ export const executeQuery = async (sqlQuery, params) => {
   let resultMessage = "";
   let status = "success";
   let logs = [];
+  let result = []
   const database = await initDb();
   try {
-    const result = await database.query(sqlQuery, params);
+    const lowerCaseQuery = sqlQuery.toLowerCase().trim();
+if (
+  !lowerCaseQuery.includes("drop table") &&
+  !lowerCaseQuery.includes("query_logs")
+) {
+       result = await database.query(sqlQuery, params);
+
+}
     
-    logs = result.rows || [];
+    logs = result?.rows || [];
     if (/^\s*select/i.test(sqlQuery)) {
       resultMessage = `Returned ${logs.length} rows`;
     } else {

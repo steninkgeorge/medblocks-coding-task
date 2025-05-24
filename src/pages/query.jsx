@@ -6,26 +6,23 @@ import { useLocation } from "react-router-dom";
 import { DownloadIcon, CopyIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { queryTemplates } from "../store/constants";
-import {Row , Col,Tooltip, Card} from "antd";
+import { Row, Col, Tooltip, Card } from "antd";
 const Query = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [queryMessage, setQueryMessage] = useState(null);
-  const [status ,setStatus ]=useState('')
-    const location = useLocation();
+  const [status, setStatus] = useState("");
+  const location = useLocation();
   useEffect(() => {
-
-    if(location.state){
-      setQuery(location.state.query)
-      setResults(location.state.result)
-      setQueryMessage(location.state.message)
-      setStatus(location.state.status)
+    if (location.state) {
+      setQuery(location.state.query);
+      setResults(location.state.result);
+      setQueryMessage(location.state.message);
+      setStatus(location.state.status);
     }
-
   }, []);
-
 
   const handleRunQuery = async () => {
     if (!query.trim()) {
@@ -40,18 +37,18 @@ const Query = () => {
     try {
       const res = await executeQuery(query);
 
-      if (res.success) {
+      if (res.success && res.affectedRows > 0) {
         setQueryMessage(
-          `updated rows: ${res.data.length},  affected rows : ${res.affectedRows}`
+          `query executed successfully , affected rows : ${res.affectedRows}`
         );
-        setStatus('success')
-      } else {
+        setStatus("success");
+      } else if (res.error) {
         setQueryMessage(res.error);
-        setStatus('error')
+        setStatus("error");
+      } else {
+        setQueryMessage("No entries matched your query");
       }
       setResults(res.data);
-
-    
     } catch (err) {
       setError(
         "Failed to execute query: " +
@@ -62,7 +59,7 @@ const Query = () => {
     }
   };
 
-  const handleExportCSV=()=>{
+  const handleExportCSV = () => {
     const headers = Object.keys(results[0]);
     const csvContent = [
       headers.join(","),
@@ -88,10 +85,9 @@ const Query = () => {
     a.click();
     window.URL.revokeObjectURL(url);
     toast.success("CSV exported successfully");
-  }
+  };
 
-  const handleCopyJSON=()=>{
-
+  const handleCopyJSON = () => {
     const jsonString = JSON.stringify(results, null, 2);
     navigator.clipboard
       .writeText(jsonString)
@@ -101,13 +97,11 @@ const Query = () => {
       .catch(() => {
         toast.error("Failed to copy JSON");
       });
+  };
 
-  }
-
-  const handleTemplateClick=(query)=>{
-    setQuery(query)
-  
-  }
+  const handleTemplateClick = (query) => {
+    setQuery(query);
+  };
 
   return (
     <div className={styles.container}>
