@@ -30,10 +30,8 @@ export const createPatient = async (patientData) => {
         patientData.health_summary || null,
       ]
     );
-    console.log(result.rows?.[0])
     return result.rows?.[0]
   } catch (error) {
-    console.error("Error creating patient:", error);
     throw error;
   }
 };

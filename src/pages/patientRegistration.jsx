@@ -86,7 +86,6 @@ const PatientRegistration = () => {
       );
       reset(); // Reset form after successful submission
     } catch (error) {
-      console.error("Registration error:", error);
     }
   };
 

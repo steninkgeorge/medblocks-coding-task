@@ -19,10 +19,8 @@ const Query = () => {
 
     if(location.state){
       setQuery(location.state.query)
-      console.log(location.state.result)
       setResults(location.state.result)
       setQueryMessage(location.state.message)
-      console.log(location.state.status)
       setStatus(location.state.status)
     }
 

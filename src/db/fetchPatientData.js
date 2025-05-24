@@ -1,4 +1,3 @@
-import { get } from "react-hook-form";
 import { initDb } from "./initDb";
 
 //fetch all patient records
@@ -10,52 +9,32 @@ export const getAllPatients = async () => {
     );
     return result.rows || [];
   } catch (error) {
-    console.error("Error executing getAllPatients query:", error);
     throw error;
   }
 };
 
+//get patient count
 export const getPatientCount = async()=>{
   const database = await initDb()
 
   try{
     const result = await database.query('SELECT COUNT(*) as count FROM patients')
-    console.log('result',result.rows[0].count)
         return result.rows[0].count;
 
   }catch(error){
-    console.error("Error fetching patient count:", error);
     throw error;
 
   }
 }
 
-//search a patient record based on their name
-export const searchPatientsByName = async (searchTerm) => {
-  const database = await initDb();
-  try {
-    const result = await database.query(
-      `SELECT * FROM patients
-       WHERE first_name ILIKE $1 OR last_name ILIKE $2
-       ORDER BY last_name, first_name`,
-      [`%${searchTerm}%`, `%${searchTerm}%`]
-    );
-    return result.rows || [];
-  } catch (error) {
-    console.error("Error executing searchPatientsByName query:", error);
-    throw error;
-  }
-};
-
+// fetch all logged queries
 export const getQueryLogs=async()=>{
   const database=await initDb();
 
   try{
     const res= await database.query('SELECT * FROM query_logs order by timestamp desc')
-    console.log(res)
     return res.rows
   }catch(err){
-    console.error("Error executing searchPatientsByName query:", err);
     throw err;
   }
 }
@@ -66,7 +45,6 @@ export const executeQuery = async (sqlQuery, params) => {
   let resultMessage = "";
   let status = "success";
   let logs = [];
-  console.log(sqlQuery)
   const database = await initDb();
   try {
     const result = await database.query(sqlQuery, params);
@@ -86,7 +64,6 @@ export const executeQuery = async (sqlQuery, params) => {
       [sqlQuery, status, resultMessage,JSON.stringify(logs), timestamp]
     );
 
-    console.log('api result',result.rows)
 
     return {
       success: true,
@@ -104,7 +81,6 @@ export const executeQuery = async (sqlQuery, params) => {
      );
 
 
-    console.error("Query execution error:", error);
     return {
       success: false,
       data: [],

@@ -33,7 +33,6 @@ const dbSchemaInit = async (db) => {
   await db.query(`
     CREATE INDEX IF NOT EXISTS idx_patient_name ON patients (last_name, first_name);
   `);
-  console.log("Database schema initialized");
 };
 
 
@@ -48,7 +47,6 @@ export async function initDb() {
       await dbSchemaInit(db);
       return db
     } catch (error) {
-      console.error("Failed to initialize database:", error);
       throw error;
     }
   }

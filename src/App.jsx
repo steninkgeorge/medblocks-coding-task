@@ -12,7 +12,6 @@ const App = () => {
 
   useEffect(() => {
     initDb();
-    console.log('db init')
   }, []);
 
   return (

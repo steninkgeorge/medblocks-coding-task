@@ -1,4 +1,4 @@
-import React, { useEffect , useRef, useState} from "react";
+import React, { useEffect , useState} from "react";
 import {
   Spin,Card,
   Row,
@@ -6,10 +6,10 @@ import {
   Statistic,
   Table,
   Tag,
-  Space,
+  
   Typography,
 } from "antd";
-import { UserPlus, Search, FileText, Users, Activity } from "lucide-react";
+import { UserPlus, Search, Users, Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getQueryLogs } from "../db/fetchPatientData";
 import { useDbState } from "../store/usedbStore";
