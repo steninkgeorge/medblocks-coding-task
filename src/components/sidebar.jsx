@@ -32,14 +32,7 @@ export const Sidebar = () => {
         >
           Query
         </Link>
-        <Link
-          to="/archive"
-          className={`${styles.navItem} ${
-            location.pathname.includes("archive") ? styles.active : ""
-          }`}
-        >
-          Archive
-        </Link>
+        
       </nav>
     </div>
   );

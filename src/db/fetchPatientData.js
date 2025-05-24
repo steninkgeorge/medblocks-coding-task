@@ -1,3 +1,4 @@
+import { get } from "react-hook-form";
 import { initDb } from "./initDb";
 
 //fetch all patient records
@@ -13,6 +14,21 @@ export const getAllPatients = async () => {
     throw error;
   }
 };
+
+export const getPatientCount = async()=>{
+  const database = await initDb()
+
+  try{
+    const result = await database.query('SELECT COUNT(*) as count FROM patients')
+    console.log('result',result.rows[0].count)
+        return result.rows[0].count;
+
+  }catch(error){
+    console.error("Error fetching patient count:", error);
+    throw error;
+
+  }
+}
 
 //search a patient record based on their name
 export const searchPatientsByName = async (searchTerm) => {
@@ -50,13 +66,12 @@ export const executeQuery = async (sqlQuery, params) => {
   let resultMessage = "";
   let status = "success";
   let logs = [];
-
+  console.log(sqlQuery)
   const database = await initDb();
   try {
     const result = await database.query(sqlQuery, params);
-    console.log(result);
+    
     logs = result.rows || [];
-
     if (/^\s*select/i.test(sqlQuery)) {
       resultMessage = `Returned ${logs.length} rows`;
     } else {
@@ -66,10 +81,12 @@ export const executeQuery = async (sqlQuery, params) => {
 
     // Store log with result
     await database.query(
-      `INSERT INTO query_logs (query, status, result_message, timestamp)
-       VALUES ($1, $2, $3, $4)`,
-      [sqlQuery, status, resultMessage, timestamp]
+      `INSERT INTO query_logs (query, status, result_message,result, timestamp)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [sqlQuery, status, resultMessage,JSON.stringify(logs), timestamp]
     );
+
+    console.log('api result',result.rows)
 
     return {
       success: true,
@@ -79,10 +96,11 @@ export const executeQuery = async (sqlQuery, params) => {
     };
   } catch (error) {
     status='error'
+    resultMessage=`${error}`
      await database.query(
-       `INSERT INTO query_logs (query, status, result_message, timestamp)
-       VALUES ($1, $2, $3, $4)`,
-       [sqlQuery, status, resultMessage, timestamp]
+       `INSERT INTO query_logs (query, status, result_message,result, timestamp)
+       VALUES ($1, $2, $3, $4,$5)`,
+       [sqlQuery, status, resultMessage,null,timestamp]
      );
 
 

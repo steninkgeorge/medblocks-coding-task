@@ -2,6 +2,8 @@ import React from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
+import { phoneRegex } from "../store/constants";
+
 import { 
   Input, 
   Select, 
@@ -10,9 +12,10 @@ import {
   Col, 
   Typography, 
   Card,
-  message
 } from 'antd';
 import { createPatient } from "../db/registerPatient";
+import toast from "react-hot-toast";
+
 
 
 const { Title } = Typography;
@@ -22,14 +25,48 @@ const { Option } = Select;
 const patientSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
   last_name: z.string().min(1, "Last name is required"),
-  date_of_birth: z.string().min(1, "Date of birth is required"),
+  date_of_birth: z
+    .string()
+    .min(1, "Date of birth is required")
+    .refine(
+      (val) => {
+        const date = new Date(val);
+        const now = new Date();
+        return date <= now;
+      },
+      {
+        message: "Enter a valid date",
+      }
+    ),
   gender: z.string().min(1, "Gender is required"),
-  phone: z.string().optional(),
+  phone: z.string().regex(phoneRegex, "Enter a valid phone number").max(10, "Phone number too long").optional(),
   address: z.string().optional(),
   insurance_id: z.string().optional(),
   insurer_name: z.string().optional(),
   health_summary: z.string().optional(),
 });
+
+
+  const FormItem = ({ label, required, error, children }) => (
+    <div style={{ marginBottom: "16px" }}>
+      <label
+        style={{
+          display: "block",
+          marginBottom: "4px",
+          fontWeight: 500,
+          color: required ? "#000" : "#666",
+        }}
+      >
+        {label} {required && <span style={{ color: "#ff4d4f" }}>*</span>}
+      </label>
+      {children}
+      {error && (
+        <div style={{ color: "#ff4d4f", fontSize: "12px", marginTop: "4px" }}>
+          {error}
+        </div>
+      )}
+    </div>
+  );
 
 const PatientRegistration = () => {
   const {
@@ -44,34 +81,15 @@ const PatientRegistration = () => {
   const onSubmit = async (formData) => {
     try {
       // Create patient in database
-      console.log(formData);
-      const patientId = await createPatient(formData);
-      console.log(patientId);
-
+      await createPatient(formData).then(() =>
+        toast.success("registered successfully")
+      );
       reset(); // Reset form after successful submission
     } catch (error) {
       console.error("Registration error:", error);
     }
   };
 
-  const FormItem = ({ label, required, error, children }) => (
-    <div style={{ marginBottom: '16px' }}>
-      <label style={{ 
-        display: 'block', 
-        marginBottom: '4px', 
-        fontWeight: 500,
-        color: required ? '#000' : '#666'
-      }}>
-        {label} {required && <span style={{ color: '#ff4d4f' }}>*</span>}
-      </label>
-      {children}
-      {error && (
-        <div style={{ color: '#ff4d4f', fontSize: '12px', marginTop: '4px' }}>
-          {error}
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div style={{ maxWidth: 800, margin: '2rem auto', padding: '0 1rem' }}>
@@ -80,7 +98,7 @@ const PatientRegistration = () => {
           Patient Registration
         </Title>
 
-        <div>
+        <form>
           <Row gutter={16}>
             <Col xs={24} sm={12}>
               <FormItem 
@@ -246,7 +264,7 @@ const PatientRegistration = () => {
               Register Patient
             </Button>
           </div>
-        </div>
+        </form>
       </Card>
     </div>
   );

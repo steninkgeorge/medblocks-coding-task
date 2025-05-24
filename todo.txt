@@ -1,5 +1,14 @@
 TODO:
 
+Today:
+-app.jsx
+    show patient count
+    develop patient list
+    make query templates
+    export csv or copy json for query results. same for app.jsx , copy json or export json
+
+
+
 high prioriy
 
 -app.jsx

@@ -25,8 +25,10 @@ const dbSchemaInit = async (db) => {
   query TEXT NOT NULL,
   status TEXT NOT NULL,
   result_message TEXT,
+  result TEXT,
   timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );`);
+
 
   await db.query(`
     CREATE INDEX IF NOT EXISTS idx_patient_name ON patients (last_name, first_name);

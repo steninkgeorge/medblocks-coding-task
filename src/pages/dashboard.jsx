@@ -1,24 +1,45 @@
-import React, { useEffect , useState} from "react";
-import { Card, Row, Col, Statistic, Table, Tag, Space, Typography } from "antd";
+import React, { useEffect , useRef, useState} from "react";
+import {
+  Spin,Card,
+  Row,
+  Col,
+  Statistic,
+  Table,
+  Tag,
+  Space,
+  Typography,
+} from "antd";
 import { UserPlus, Search, FileText, Users, Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { set } from "zod/v4";
 import { getQueryLogs } from "../db/fetchPatientData";
+import { useDbState } from "../store/usedbStore";
 
 const { Title } = Typography;
+const { Text } = Typography;
 
 const Dashboard = () => {
   const navigate = useNavigate()
   const [queryLogs, setQueryLogs]=useState([])
   const [error, setError]=useState('')
-
+  const {patientCount} = useDbState()
+  const [loading , setLoading]=useState(false)
   const columns = [
     {
       title: "Query",
       dataIndex: "query",
       key: "query",
-      ellipsis: true,
-      width: "40%",
+      width: "30%",
+      render: (text, data) => (
+        <div style={{ maxWidth: "300px" }}>
+          <Text ellipsis
+  onClick={()=> {
+    navigate('/query', {state: {query: text,status : data.status, message: data.result_message,result: JSON.parse(data.result)}})}}
+            style={{ color: "#1890ff", cursor: "pointer" }}
+          >
+            {text}
+          </Text>
+        </div>
+      ),
     },
     {
       title: "Status",
@@ -36,12 +57,17 @@ const Dashboard = () => {
       dataIndex: "result_message",
       key: "result_message",
       width: "25%",
+      ellipsis: true
     },
     {
       title: "Timestamp",
       dataIndex: "timestamp",
       key: "timestamp",
       width: "25%",
+      render: (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleString();
+      },
     },
   ];
 
@@ -50,20 +76,23 @@ const Dashboard = () => {
   };
 
   useEffect(()=>{
-    const getlogs =async()=>{
+
+    const getData =async()=>{
           try {
+            setLoading(true)
             const querylogs = await getQueryLogs()
-            console.log(querylogs)
             setQueryLogs(querylogs)
           } catch (error) {
             setError(error);
+          }finally{
+            setLoading(false)
           }
     }
-    getlogs()
+    getData()
   },[])
 
   return (
-    <div style={{ padding: "24px",  minHeight: "100vh" }}>
+    <div style={{ padding: "24px", minHeight: "100vh" }}>
       <Card style={{ marginBottom: "24px" }}>
         <Row align="middle">
           <Col flex="none" style={{ marginRight: "16px" }}>
@@ -83,7 +112,7 @@ const Dashboard = () => {
           <Col flex="auto">
             <Statistic
               title="Total Patients"
-              value={1247}
+              value={patientCount}
               valueStyle={{
                 color: "#1890ff",
                 fontSize: "32px",
@@ -99,7 +128,7 @@ const Dashboard = () => {
           <Card
             hoverable
             onClick={() => handleCardClick("/register")}
-            style={{ height: "140px", cursor: "pointer",}}
+            style={{ height: "140px", cursor: "pointer" }}
           >
             <div
               style={{ display: "flex", alignItems: "center", height: "100%" }}
@@ -159,38 +188,7 @@ const Dashboard = () => {
           </Card>
         </Col>
 
-        <Col xs={24} sm={8}>
-          <Card
-            hoverable
-            onClick={() => handleCardClick("/archive")}
-            style={{ height: "140px", cursor: "pointer" }}
-          >
-            <div
-              style={{ display: "flex", alignItems: "center", height: "100%" }}
-            >
-              <div
-                style={{
-                  background: "#722ed1",
-                  borderRadius: "8px",
-                  padding: "12px",
-                  marginRight: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <FileText size={24} color="white" />
-              </div>
-              <div>
-                <Title level={4} style={{ margin: 0, marginBottom: "4px" }}>
-                  Records
-                </Title>
-                <p style={{ margin: 0, color: "#666" }}>
-                  View all patient history
-                </p>
-              </div>
-            </div>
-          </Card>
-        </Col>
+       
       </Row>
 
       <Card>
@@ -214,20 +212,33 @@ const Dashboard = () => {
             <Activity size={20} color="white" />
           </div>
           <Title level={3} style={{ margin: 0 }}>
-            Recent Query Activity
+            Query Logs
           </Title>
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={queryLogs}
-          pagination={{
-            pageSize: 5,
-            showSizeChanger: false,
-            showQuickJumper: true,
-          }}
-          size="small"
-        />
+        {loading ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "40px 0",
+            }}
+          >
+            <Spin size="large" tip="Loading..." />
+          </div>
+        ) : (
+          <Table
+            columns={columns}
+            dataSource={queryLogs}
+            rowKey="id"
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: false,
+              showQuickJumper: true,
+            }}
+            size="medium"
+          />
+        )}
       </Card>
     </div>
   );
